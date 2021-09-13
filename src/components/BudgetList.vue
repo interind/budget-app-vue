@@ -37,11 +37,11 @@ export default ({
 </script>
 
 <style scoped>
+
   .budget-list-wrap {
     flex-basis: 58%;
     align-self: stretch;
   }
-
   .budget-value {
     font-weight: bold;
   }

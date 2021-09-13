@@ -20,6 +20,7 @@ export default {
   text-transform: uppercase;
   padding: 20px;
   text-align: left;
+  flex-basis: 8%;
 }
 
 </style>

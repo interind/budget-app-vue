@@ -1,15 +1,15 @@
 <template>
   <div id="app">
-    <Form />
     <TotalBalance :total="totalBalance"/>
+    <Form @submitForm="onSubmit"/>
     <BudgetList :list="list" @deleteItem="onDeleteItem"/>
   </div>
 </template>
 
 <script>
 
-import Form from './components/Form';
 import BudgetList from './components/BudgetList';
+import Form from './components/Form';
 import TotalBalance from './components/TotalBalance';
 
 export default {
@@ -38,6 +38,10 @@ export default {
   methods: {
     onDeleteItem(id) {
       this.$delete(this.list, id);
+    },
+    onSubmit(data) {
+      const info = {...data, id: Math.random(1000)};
+      this.$set(this.list, info.id, info);
     }
   },
   computed: {
@@ -59,7 +63,6 @@ export default {
   background-color: #808080;
   min-height: 60vh;
   display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
+  justify-content: space-around;
 }
 </style>

@@ -1,6 +1,6 @@
 <template>
   <ElCard class="form-card">
-    <ElForm :model="formData" ref="addItemForm" :rules="rules" label-position="top">
+    <ElForm name="form-buget"  @submit.prevent="" method="POST" @keydown.enter.prevent="changeSubmit" :model="formData" ref="addItemForm" :rules="rules" label-position="top">
       <ElFormItem label="Тип бюджета" prop="type">
         <ElSelect class="type-select" v-model="formData.type" placeholder="Choose type...">
           <ElOption label="Доход" value="INCOME" />
@@ -13,7 +13,7 @@
       <ElFormItem label="Value" prop="value">
         <ElInput v-model.number="formData.value" />
       </ElFormItem>
-      <ElButton type="primary" :disabled="!isActive" @click="onSubmit">Submit</ElButton>
+      <ElButton native-type="submit" type="primary" @click="changeSubmit" :disabled="!isActive">Add</ElButton>
     </ElForm>
   </ElCard>
 </template>
@@ -22,33 +22,36 @@
 
 export default {
   name: 'Form',
-  data: () => ({
-    formData: {
-      type: 'INCOME',
-      comment: '',
-      value: 0,
-    },
-    rules: {
-      comment: [{required: true, min: 2, message: 'Please select comment', trigger: 'change'}],
-      value: [{required: true, message: 'Please select value', trigger: ['blur', 'change']},
-      {required: true, type: 'number', message: 'Please select number', trigger: 'change'}
-      ],
+  data() {
+    return {
+      formData: {
+        type: 'INCOME',
+        comment: '',
+        value: 0,
+      },
+      rules: {
+        comment: [{required: true, min: 2, message: 'Please select comment', trigger: 'change'}],
+        value: [{required: true, message: 'Please select value', trigger: 'blur'},
+        {required: true, type: 'number', message: 'Please select number', trigger: 'change'}
+        ],
+      },
     }
-  }),
+  },
   methods: {
-    onSubmit() {
-      this.$refs.addItemForm.validate((valid) => {
-        console.log(this.$refs.addItemForm);
+    changeSubmit() {
+      this.$refs['addItemForm'].validate((valid) => {
         if (valid) {
-          this.$emit("submitForm", { ...this.formData });
-          this.$refs.addItemForm.resetFields();
+          this.$emit('change-submit', { ...this.formData });
+          this.$refs['addItemForm'].resetFields();
+        } else {
+          return new Error('Что-то пошло не так');
         }
       })
     },
   },
   computed: {
     isActive() {
-      return Boolean(this.formData.value);
+      return Boolean(this.formData.value > 0);
     }
   }
 }
@@ -56,8 +59,9 @@ export default {
 
 <style scoped>
   .form-card {
-    flex-basis: 30%;
-    align-self: flex-start;
+    flex-basis: 20%;
+    order: 2;
+    align-self: stretch;
   }
   .type-select {
     width: 100%;

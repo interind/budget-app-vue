@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <TotalBalance :total="totalBalance"/>
-    <Form @submitForm="onSubmit"/>
+    <Form v-on:change-submit="onSubmit" />
     <BudgetList :list="list" @deleteItem="onDeleteItem"/>
   </div>
 </template>
@@ -20,7 +20,7 @@ export default {
     Form
   },
   data: () => ({
-    list: {
+    list: JSON.parse(localStorage.getItem('list')) || {
       1: {
         type: 'INCOME',
         value: 100,
@@ -37,11 +37,18 @@ export default {
   }),
   methods: {
     onDeleteItem(id) {
-      this.$delete(this.list, id);
+      if (confirm('Удалить ?')) {
+        this.$delete(this.list, id);
+        this.setStorage(this.list);
+      }
     },
     onSubmit(data) {
-      const info = {...data, id: Math.random(1000)};
-      this.$set(this.list, info.id, info);
+      const correctData = {...data, value: data.type === 'OUTCOME' ? Number(`-${+data.value}`) : data.value, id: Math.random(1000)}
+      this.$set(this.list, correctData.id, correctData);
+      this.setStorage(this.list)
+    },
+    setStorage(list) {
+      localStorage.setItem('list', JSON.stringify(list));
     }
   },
   computed: {
@@ -52,7 +59,11 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
+:root {
+  --color-outcome: hsl(0, 60%, 50%);
+  --color-income: hsla(123, 59%, 51%, 0.973);
+}
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -60,9 +71,9 @@ export default {
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
-  background-color: #808080;
   min-height: 60vh;
   display: flex;
-  justify-content: space-around;
+  flex-wrap: wrap;
+  justify-content: flex-start;
 }
 </style>

@@ -1,5 +1,6 @@
 # budget-app-vue
 
+Приложение дохода и расхода, сохраняет историю на странице.
 ## Project setup
 ```
 npm install
@@ -15,10 +16,8 @@ npm run serve
 npm run build
 ```
 
-### Lints and fixes files
-```
-npm run lint
-```
+### Link
+  https://interind.github.io/budget-app-vue/
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+
+

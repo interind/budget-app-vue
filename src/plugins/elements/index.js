@@ -11,6 +11,8 @@ import {
   Select,
   Option,
   Alert,
+  CheckboxGroup,
+  Checkbox,
 } from 'element-ui';
 
 const elements = [
@@ -21,7 +23,9 @@ const elements = [
   Input,
   Select,
   Option,
-  Alert
+  Alert,
+  CheckboxGroup,
+  Checkbox
 ];
 
 locale.use(lang);
